@@ -1,14 +1,12 @@
 package com.example.yeialel.comunicaandroid;
 
-import android.content.Context;
+
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -16,11 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button irAlaWeb;  // boton para ir a la web
     private EditText direccionWeb;  // es donde se escribira la direcion web
-    private WebView webView;  // donde se mostrada la pagina web
-
     private String direccionURL;  // almacenara la direccion web a al que queremos ir
-
-    private ReceptorRed receptor;  // Serivira para poder
+    private ReceptorRed receptor;  // Servira para poder verificar el estado de la red
 
 
     //Primer Grupo----------------------------------------------------------------------------------
@@ -29,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // se declara el contenido de la actividad
-        webView = (WebView) findViewById(R.id.webViewPaginasWebs);
+        // se declara el EditText
         direccionWeb = (EditText) findViewById(R.id.editTextDireccionWeb);
 
         /**con esto llamaremos al metodo qe verificara el estado de la red que esta en la clase 'ReceptorRed.class'
@@ -46,18 +40,14 @@ public class MainActivity extends AppCompatActivity {
         irAlaWeb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                direccionURL = direccionWeb.getText().toString();
+                // sera para pasar la url a la activity que tiene el WebView
+                Intent intent = new Intent(getApplicationContext(), WebViewSolo.class);
+                direccionURL = direccionWeb.getText().toString(); // recive la pagina web
                 direccionURL = "http://" + direccionURL;
-
-                webView.setWebViewClient(new WebViewClient());
-                webView.getSettings().setJavaScriptEnabled(true);  // configura
-                webView.getSettings().getJavaScriptEnabled();  // Esto permite que algunas paginas funcionen bien
-                webView.getSettings().setBuiltInZoomControls(true); // permite el zoom si pagina no es responsive
-                webView.loadUrl(direccionURL);  // recibe la direccion de la pagina web
-
-                //Cierra el teclado despues de hacer click en el boton
-                InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(direccionWeb.getWindowToken(), 0);
+                //Envia el dato de la pagina web a la otra vista 'WebViewSola.class'
+                intent.putExtra("valorEnviado", direccionURL);
+                startActivity(intent);
+                // usando '(getApplicationContext()' se asegura que no halla fallos por contenedor
             }
         });
     }
@@ -106,17 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
-    //FUNCIONES CREADAS
-
-    // con esto metodo podemos hacer que la pagina web lea el retroceso a la anterior pagina y no que se cierre la aplicacion
-    public void onBackPressed(){
-        if(webView.canGoBack()){
-            webView.goBack();
-        }else {
-            super.onBackPressed();
-        }
-    }
-
-
-
 }
+
+//NOTAS
+/*
+ Cierra el teclado despues de hacer click en el boton
+ InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+ inputMethodManager.hideSoftInputFromWindow(direccionWeb.getWindowToken(), 0);
+ */

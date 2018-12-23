@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.yeialel.comunicaandroid">
 
-
     <!-- Esto sirve para dar permiso de uso de acceso a internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--Permisos para acceder al estado de la conexión-->
+    <!-- Permisos para acceder al estado de la conexión -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
 
 
     <application
@@ -24,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".WebViewSolo"></activity>
     </application>
 
 </manifest>
